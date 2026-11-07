@@ -2024,3 +2024,130 @@ a { text-decoration: none; color: inherit; }
   .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
   .btn-cta { padding: 8px 16px; font-size: 0.8rem; }
 }
+
+
+/* ============================================================
+   FIXES: STATS, TRUST BAR, DESTINATIONS (flag colours)
+   ============================================================ */
+
+/* --- Hero stats: number + suffix on one line --- */
+.stat-number-wrap {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  line-height: 1;
+}
+.stat-number-wrap .stat-suffix { margin-top: 0; align-self: flex-start; }
+
+/* --- Trust bar: label no longer overlaps the scrolling names --- */
+.trust-bar { padding: 22px 0; }
+.trust-container {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  max-width: 100%;
+  padding: 0;
+}
+.trust-label-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  background: var(--navy);
+  padding: 8px 28px 8px max(32px, calc((100vw - 1280px) / 2 + 32px));
+  box-shadow: 18px 0 20px -4px var(--navy);
+}
+.trust-badge-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+.trust-label { padding: 0; color: rgba(255,255,255,0.75); }
+.trust-marquee-wrapper {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+.trust-logos {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+.trust-logo { padding-right: 56px; }
+
+/* --- Destinations: real flag colours --- */
+.destinations-grid {
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: none;
+}
+.dest-card { grid-column: span 2; min-height: 340px; }
+.dest-card:nth-child(4),
+.dest-card:nth-child(5) { grid-column: span 3; }
+
+.dest-flag-stripe { position: absolute; top: 0; left: 0; right: 0; height: 6px; z-index: 3; }
+.dest-card-header {
+  position: absolute;
+  top: 20px; left: 24px; right: 24px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.dest-flag-badge {
+  display: inline-flex;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+  line-height: 0;
+}
+.dest-flag-svg { display: block; }
+.dest-country-badge {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(8px);
+}
+
+/* UK: navy, with red + white */
+.dest-card-uk { background: #012169; }
+.dest-card-uk .dest-flag-stripe { background: linear-gradient(90deg, #012169 0 33.3%, #FFFFFF 33.3% 66.6%, #C8102E 66.6% 100%); }
+/* Canada: red + white */
+.dest-card-canada { background: #D80027; }
+.dest-card-canada .dest-flag-stripe { background: linear-gradient(90deg, #D80027 0 25%, #FFFFFF 25% 75%, #D80027 75% 100%); }
+/* USA: blue, white, red */
+.dest-card-usa { background: #002868; }
+.dest-card-usa .dest-flag-stripe { background: linear-gradient(90deg, #002868 0 33.3%, #FFFFFF 33.3% 66.6%, #BF0A30 66.6% 100%); }
+/* Australia: blue, red, white */
+.dest-card-australia { background: #00008B; }
+.dest-card-australia .dest-flag-stripe { background: linear-gradient(90deg, #00008B 0 33.3%, #FFFFFF 33.3% 66.6%, #E4002B 66.6% 100%); }
+/* Continental Europe: EU blue + gold */
+.dest-card-europe { background: #003399; }
+.dest-card-europe .dest-flag-stripe { background: #FFCC00; }
+
+@media (max-width: 1024px) {
+  .destinations-grid { grid-template-columns: repeat(2, 1fr); }
+  .dest-card,
+  .dest-card:nth-child(4),
+  .dest-card:nth-child(5) { grid-column: span 1; }
+  .dest-card:nth-child(5) { grid-column: span 2; }
+}
+@media (max-width: 768px) {
+  .destinations-grid { grid-template-columns: 1fr; }
+  .dest-card,
+  .dest-card:nth-child(5) { grid-column: span 1; }
+  .trust-label-box { padding: 8px 16px; }
+  .trust-label { font-size: 0.78rem; }
+  .dest-country-badge { display: none; }
+}

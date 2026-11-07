@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
       gaugeCircle.style.background = `conic-gradient(var(--gold) 0% ${data.score}%, rgba(255,255,255,0.12) ${data.score}% 100%)`;
     }
 
-    const countryNames = { uk: 'United Kingdom', canada: 'Canada', usa: 'United States', australia: 'Australia', europe: 'Europe' };
+    const countryNames = { uk: 'United Kingdom', canada: 'Canada', usa: 'United States', australia: 'Australia', europe: 'Continental Europe' };
     const degreeNames = { masters: "Master's program", bachelors: "Bachelor's degree", phd: 'Doctoral research', foundation: 'Foundation pathway' };
     
     if (summaryEl) {
