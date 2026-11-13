@@ -224,6 +224,17 @@
 
   </main>
 
+  <div id="confirmModal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h3 id="confirmModalTitle">Confirm Action</h3>
+      <p id="confirmModalText">Are you sure you want to proceed?</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" id="confirmCancelBtn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmOkBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
   <script src="stories-data.js"></script>

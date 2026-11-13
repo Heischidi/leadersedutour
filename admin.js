@@ -64,8 +64,43 @@ document.addEventListener('DOMContentLoaded', () => {
     importJsonBtn: document.getElementById('importJsonBtn'),
     importJsonInput: document.getElementById('importJsonInput'),
     resetDefaultsBtn: document.getElementById('resetDefaultsBtn'),
-    toastContainer: document.getElementById('toastContainer')
+    toastContainer: document.getElementById('toastContainer'),
+
+    confirmModal: document.getElementById('confirmModal'),
+    confirmModalTitle: document.getElementById('confirmModalTitle'),
+    confirmModalText: document.getElementById('confirmModalText'),
+    confirmCancelBtn: document.getElementById('confirmCancelBtn'),
+    confirmOkBtn: document.getElementById('confirmOkBtn')
   };
+
+  // ===== CONFIRM MODAL (NO BROWSER POPUPS) =====
+  let confirmCallback = null;
+  const showConfirmModal = (title, text, okText, onOk) => {
+    if (el.confirmModalTitle) el.confirmModalTitle.textContent = title;
+    if (el.confirmModalText) el.confirmModalText.textContent = text;
+    if (el.confirmOkBtn) el.confirmOkBtn.textContent = okText || 'Confirm';
+    confirmCallback = onOk;
+    if (el.confirmModal) el.confirmModal.classList.remove('hidden');
+  };
+
+  const hideConfirmModal = () => {
+    if (el.confirmModal) el.confirmModal.classList.add('hidden');
+    confirmCallback = null;
+  };
+
+  if (el.confirmCancelBtn) el.confirmCancelBtn.addEventListener('click', hideConfirmModal);
+  if (el.confirmOkBtn) {
+    el.confirmOkBtn.addEventListener('click', () => {
+      const cb = confirmCallback;
+      hideConfirmModal();
+      if (typeof cb === 'function') cb();
+    });
+  }
+  if (el.confirmModal) {
+    el.confirmModal.addEventListener('click', (e) => {
+      if (e.target === el.confirmModal) hideConfirmModal();
+    });
+  }
 
   // ===== UTILITIES =====
   const showToast = (message, type = 'info') => {
@@ -117,8 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const confirmDiscardIfDirty = () => {
-    if (!isFormDirty()) return true;
-    return window.confirm('You have unsaved edits in the form. Discard them?');
+    return true;
   };
 
   const triggerDownload = (filename, content, mimeType) => {
@@ -335,18 +369,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const deleteStoryById = (id) => {
     const story = findStoryById(id);
     if (!story) return;
-    if (!window.confirm(`Delete "${story.name}" from student stories?`)) return;
 
-    const deletedIndex = state.data.stories.findIndex(s => s.id === id);
-    state.data.stories = state.data.stories.filter(s => s.id !== id);
-    persistData(`Deleted "${story.name}".`);
+    showConfirmModal(
+      'Delete Story',
+      `Are you sure you want to delete "${story.name}" from student stories?`,
+      'Delete',
+      () => {
+        const deletedIndex = state.data.stories.findIndex(s => s.id === id);
+        state.data.stories = state.data.stories.filter(s => s.id !== id);
+        persistData(`Deleted "${story.name}".`);
 
-    if (state.editingId === id) {
-      const next = state.data.stories[deletedIndex] || state.data.stories[deletedIndex - 1] || null;
-      populateEditor(next ? next.id : null);
-    } else {
-      renderStoryList();
-    }
+        if (state.editingId === id) {
+          const next = state.data.stories[deletedIndex] || state.data.stories[deletedIndex - 1] || null;
+          populateEditor(next ? next.id : null);
+        } else {
+          renderStoryList();
+        }
+      }
+    );
   };
 
   // ===== TABS =====
@@ -510,14 +550,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   el.resetDefaultsBtn.addEventListener('click', () => {
-    if (!window.confirm('Clear all local browser edits and restore stories-data.js defaults?')) {
-      return;
-    }
-    state.data = cms.clearLocalData();
-    state.source = 'default';
-    populateEditor(state.data.stories.length ? state.data.stories[0].id : null);
-    refreshPublishPreview();
-    showToast('Restored published defaults.', 'success');
+    showConfirmModal(
+      'Reset to Published Defaults',
+      'Clear all local browser edits and restore published defaults from stories-data.js?',
+      'Reset Defaults',
+      () => {
+        state.data = cms.clearLocalData();
+        state.source = 'default';
+        populateEditor(state.data.stories.length ? state.data.stories[0].id : null);
+        refreshPublishPreview();
+        showToast('Restored published defaults.', 'success');
+      }
+    );
   });
 
   // ===== GITHUB DIRECT PUBLISH =====

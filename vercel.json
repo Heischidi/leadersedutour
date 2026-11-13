@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.leadersedutourltd.com"
+        }
+      ],
+      "destination": "https://leadersedutourltd.com/:path*",
+      "permanent": true
+    }
+  ]
+}
