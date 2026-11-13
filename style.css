@@ -1091,8 +1091,8 @@ a { text-decoration: none; color: inherit; }
 
 .testimonials-track {
   display: flex;
-  gap: 28px;
-  padding: 0 24px;
+  gap: 0;
+  padding: 0;
   animation: scroll-testimonials 40s linear infinite;
   width: max-content;
 }
@@ -1111,8 +1111,11 @@ a { text-decoration: none; color: inherit; }
   padding: 36px 32px;
   min-width: 380px;
   max-width: 380px;
+  margin-right: 28px;
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
+  display: flex;
+  flex-direction: column;
 }
 
 .testimonial-card:hover {
@@ -1134,6 +1137,7 @@ a { text-decoration: none; color: inherit; }
   line-height: 1.75;
   margin-bottom: 24px;
   font-style: italic;
+  flex: 1;
 }
 
 .testimonial-author {
@@ -2005,7 +2009,7 @@ a { text-decoration: none; color: inherit; }
   .destinations-grid { grid-template-columns: 1fr; }
   .why-grid { grid-template-columns: 1fr; }
   .process-timeline { grid-template-columns: 1fr; }
-  .testimonial-card { min-width: 300px; max-width: 300px; }
+  .testimonial-card { min-width: 300px; max-width: 300px; margin-right: 20px; padding: 26px 22px; }
   .eligibility-card { padding: 24px; }
   .eval-options { flex-direction: column; }
   .contact-form-wrap { padding: 32px 24px; }

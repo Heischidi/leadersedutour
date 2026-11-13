@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stories Admin | Leadersedutour</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="brand">
+        <img src="logo-real.png" alt="Leadersedutour" />
+        <div class="brand-meta">
+          <span class="brand-title">Stories Admin</span>
+          <span class="brand-sub">Name, school &amp; review editor</span>
+        </div>
+      </a>
+
+      <div class="topbar-right">
+        <span class="status-pill" id="storageSourceBadge">Published Defaults</span>
+        <span class="status-pill is-unsaved hidden" id="unsavedHeaderBadge">Unsaved edits</span>
+        <a href="index.html#testimonials" target="_blank" rel="noopener" class="btn btn-outline-light" id="previewSiteLink">View Site &#8599;</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs-bar" aria-label="Admin sections">
+    <div class="tabs-inner">
+      <button type="button" class="tab-btn active" id="tabBtnStories" data-tab="stories">Stories</button>
+      <button type="button" class="tab-btn" id="tabBtnPublish" data-tab="publish">Publish &amp; Export</button>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- ========== STORIES TAB ========== -->
+    <section id="tabPanelStories" class="stories-layout">
+      <!-- Left: Story list -->
+      <aside class="panel list-panel" aria-label="Student stories list">
+        <div class="list-header">
+          <div class="list-title-wrap">
+            <h2>Stories</h2>
+            <span class="count-badge" id="storyCountBadge">0</span>
+          </div>
+          <button type="button" class="btn btn-primary" id="addStoryBtn">+ New Story</button>
+        </div>
+
+        <div class="search-wrap">
+          <input
+            type="search"
+            id="storySearchInput"
+            class="search-input"
+            placeholder="Search by name, school, or review..."
+            aria-label="Search stories"
+          />
+        </div>
+
+        <div class="story-list" id="storyList"></div>
+      </aside>
+
+      <!-- Right: Live preview + 3-field editor -->
+      <div class="workspace">
+        <section class="panel preview-panel" aria-label="Live card preview">
+          <div class="preview-header">
+            <span class="preview-label">Live Website Card Preview</span>
+            <span class="mode-badge" id="editorModeBadge">Editing Story</span>
+          </div>
+
+          <article class="preview-card">
+            <div class="preview-stars" id="previewStars">★★★★★</div>
+            <p class="preview-quote" id="previewReview">"Share the student's review of Leadersedutour..."</p>
+            <div class="preview-author">
+              <div class="preview-avatar" id="previewAvatar">ST</div>
+              <div class="preview-author-info">
+                <strong id="previewName">Student Name</strong>
+                <span id="previewSchool">School / University</span>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel editor-panel" aria-label="Story details form">
+          <div class="editor-header">
+            <div>
+              <h2>Story Details</h2>
+              <p class="editor-sub">Only the person's name, their school, and their review to Leadersedutour are stored and shown.</p>
+            </div>
+            <span class="status-pill is-unsaved hidden" id="unsavedBadge">Unsaved</span>
+          </div>
+
+          <form id="storyForm" novalidate>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="storyNameInput">Person's Name *</label>
+                <input
+                  type="text"
+                  id="storyNameInput"
+                  class="form-control"
+                  maxlength="100"
+                  placeholder="e.g. Chidi Kalu"
+                  required
+                />
+                <span class="field-hint">Initials badge is generated automatically from the name.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="storySchoolInput">School *</label>
+                <input
+                  type="text"
+                  id="storySchoolInput"
+                  class="form-control"
+                  maxlength="140"
+                  placeholder="e.g. University of Manchester, UK"
+                  required
+                />
+                <span class="field-hint">University or school the student attends.</span>
+              </div>
+
+              <div class="form-group full">
+                <div class="form-label-row">
+                  <label for="storyReviewInput">Review to Leadersedutour *</label>
+                  <span class="char-count" id="reviewCharCount">0 / 600</span>
+                </div>
+                <textarea
+                  id="storyReviewInput"
+                  class="form-control"
+                  maxlength="600"
+                  placeholder="Write the student's review of Leadersedutour..."
+                  required
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="editor-actions">
+              <div class="action-group">
+                <button type="submit" class="btn btn-primary" id="saveStoryBtn">Save Story</button>
+                <button type="button" class="btn btn-outline" id="discardStoryBtn">Reset Form</button>
+              </div>
+              <div class="action-group">
+                <button type="button" class="btn btn-outline" id="duplicateStoryBtn">Duplicate</button>
+                <button type="button" class="btn btn-danger" id="deleteCurrentStoryBtn">Delete</button>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+    </section>
+
+    <!-- ========== PUBLISH & EXPORT TAB ========== -->
+    <section id="tabPanelPublish" class="publish-grid hidden">
+      <div class="panel publish-card full-span">
+        <h3>Publish Status</h3>
+        <div class="status-banner" id="publishStatusText">Checking local changes...</div>
+        <p>Edits saved in the Stories tab appear immediately in this browser when you open <strong>index.html</strong>. To publish permanently for all website visitors, push directly to GitHub below or replace <code>stories-data.js</code> in your site folder.</p>
+      </div>
+
+      <div class="panel publish-card">
+        <h3>1. Save or Download <code>stories-data.js</code></h3>
+        <p>Export the clean <code>stories-data.js</code> file so you can overwrite it locally or copy it directly.</p>
+        <div class="action-group">
+          <button type="button" class="btn btn-primary" id="downloadStoriesJsBtn">Download stories-data.js</button>
+          <button type="button" class="btn btn-navy" id="saveFilePickerBtn">Save Directly to File</button>
+          <button type="button" class="btn btn-outline" id="copyStoriesJsBtn">Copy Code</button>
+        </div>
+        <pre class="code-preview" id="generatedJsPreview"></pre>
+      </div>
+
+      <div class="panel publish-card">
+        <h3>2. Push Directly to GitHub</h3>
+        <p>Commit the updated <code>stories-data.js</code> directly to your repository using a Personal Access Token (<code>repo</code> or Contents write scope).</p>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="ghOwnerInput">GitHub Owner</label>
+            <input type="text" id="ghOwnerInput" class="form-control" value="Heischidi" />
+          </div>
+          <div class="form-group">
+            <label for="ghRepoInput">Repository</label>
+            <input type="text" id="ghRepoInput" class="form-control" value="leadersedutour" />
+          </div>
+          <div class="form-group">
+            <label for="ghBranchInput">Branch</label>
+            <input type="text" id="ghBranchInput" class="form-control" value="main" />
+          </div>
+          <div class="form-group">
+            <label for="ghCommitMsgInput">Commit Message</label>
+            <input type="text" id="ghCommitMsgInput" class="form-control" value="Update student stories via admin" />
+          </div>
+          <div class="form-group full">
+            <label for="ghTokenInput">GitHub Token</label>
+            <input type="password" id="ghTokenInput" class="form-control" placeholder="ghp_... or github_pat_..." autocomplete="off" />
+          </div>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="ghRememberToken" />
+          <span>Remember repo &amp; token in this browser's localStorage</span>
+        </label>
+
+        <div class="action-group">
+          <button type="button" class="btn btn-outline" id="ghTestBtn">Test Connection</button>
+          <button type="button" class="btn btn-navy" id="ghPushBtn">Publish to GitHub</button>
+        </div>
+
+        <div class="status-banner hidden" id="ghStatusBanner"></div>
+      </div>
+
+      <div class="panel publish-card full-span">
+        <h3>3. Backup &amp; Reset</h3>
+        <p>Download a JSON backup of all stories, import an existing JSON backup, or clear local browser drafts and revert to the file defaults in <code>stories-data.js</code>.</p>
+        <div class="action-group">
+          <button type="button" class="btn btn-outline" id="exportJsonBtn">Export JSON Backup</button>
+          <button type="button" class="btn btn-outline" id="importJsonBtn">Import JSON Backup</button>
+          <input type="file" id="importJsonInput" accept=".json,application/json" class="hidden" />
+          <button type="button" class="btn btn-danger" id="resetDefaultsBtn">Reset to Published Defaults</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <script src="stories-data.js"></script>
+  <script src="cms-store.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

@@ -8,6 +8,90 @@ document.addEventListener('DOMContentLoaded', () => {
   const navbar = document.getElementById('navbar');
   const navLinks = document.querySelectorAll('.nav-link');
 
+  // ===== DYNAMIC STORIES RENDERER =====
+  const cms = window.LEADERS_CMS;
+
+  const buildStoryCardElement = (story) => {
+    const card = document.createElement('div');
+    card.className = 'testimonial-card';
+
+    const stars = document.createElement('div');
+    stars.className = 'testimonial-stars';
+    stars.textContent = '★★★★★';
+
+    const quote = document.createElement('p');
+    quote.className = 'testimonial-text';
+    quote.textContent = `"${story.review}"`;
+
+    const author = document.createElement('div');
+    author.className = 'testimonial-author';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'author-avatar';
+    avatar.textContent = cms ? cms.getInitials(story.name) : 'ST';
+
+    const info = document.createElement('div');
+    info.className = 'author-info';
+
+    const nameStrong = document.createElement('strong');
+    nameStrong.textContent = story.name;
+    info.appendChild(nameStrong);
+
+    const schoolSpan = document.createElement('span');
+    schoolSpan.textContent = story.school;
+    info.appendChild(schoolSpan);
+
+    author.appendChild(avatar);
+    author.appendChild(info);
+
+    card.appendChild(stars);
+    card.appendChild(quote);
+    card.appendChild(author);
+
+    return card;
+  };
+
+  const renderStories = () => {
+    if (!cms) return;
+    const { data } = cms.loadData();
+    const track = document.getElementById('testimonialsTrack');
+    if (!track) return;
+
+    const stories = data.stories || [];
+    track.innerHTML = '';
+
+    if (stories.length === 0) {
+      track.style.animation = 'none';
+      const empty = document.createElement('p');
+      empty.style.color = 'var(--text-muted)';
+      empty.style.padding = '24px';
+      empty.textContent = 'No student stories yet. Add stories from admin.html.';
+      track.appendChild(empty);
+      return;
+    }
+
+    // Ensure at least 5 cards per loop half so the marquee fills wide displays seamlessly
+    const halfSet = [];
+    while (halfSet.length < 5) {
+      halfSet.push(...stories);
+    }
+    const fullTrackList = [...halfSet, ...halfSet];
+    fullTrackList.forEach(story => {
+      track.appendChild(buildStoryCardElement(story));
+    });
+
+    const durationSec = Math.max(26, halfSet.length * 7.5);
+    track.style.animation = `scroll-testimonials ${durationSec}s linear infinite`;
+  };
+
+  renderStories();
+
+  window.addEventListener('storage', (e) => {
+    if (cms && e.key === cms.STORAGE_KEY) {
+      renderStories();
+    }
+  });
+
   const handleScroll = () => {
     if (window.scrollY > 60) {
       navbar.classList.add('scrolled');
@@ -131,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Observe elements for fade-in
   const fadeTargets = [
     '.about-grid', '.service-card', '.dest-card', '.why-card',
-    '.process-step', '.testimonial-card', '.showcase-grid',
+    '.process-step', '.testimonials-wrapper', '.showcase-grid',
     '.contact-grid', '.hero-stats', '.eligibility-card', '.faq-item'
   ];
 
