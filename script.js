@@ -64,8 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
       track.style.animation = 'none';
       const empty = document.createElement('p');
       empty.style.color = 'var(--text-muted)';
-      empty.style.padding = '24px';
-      empty.textContent = 'No student stories yet. Add stories from admin.html.';
+      empty.style.padding = '36px 16px';
+      empty.style.textAlign = 'center';
+      empty.style.width = '100%';
+      empty.style.fontSize = '1.05rem';
+      empty.textContent = 'New student success stories coming soon!';
       track.appendChild(empty);
       return;
     }
