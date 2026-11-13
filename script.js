@@ -434,12 +434,35 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Simulate form submission
+      // Real form submission
       const submitBtn = document.getElementById('submitFormBtn');
       submitBtn.disabled = true;
       submitBtn.querySelector('span').textContent = 'Sending...';
 
-      setTimeout(() => {
+      const lastName = document.getElementById('lastName') ? document.getElementById('lastName').value.trim() : '';
+      const service = document.getElementById('service') ? document.getElementById('service').value : '';
+      const message = document.getElementById('message') ? document.getElementById('message').value.trim() : '';
+
+      fetch('https://formsubmit.co/ajax/info@leadersedutourltd.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: `${firstName} ${lastName}`.trim(),
+          email: email,
+          phone: phone,
+          destination: destination,
+          service: service || 'General Consultation',
+          message: message || 'No message provided',
+          _subject: `New Consultation Request from ${firstName} ${lastName}`,
+          _template: 'table'
+        })
+      })
+      .then(res => res.json())
+      .catch(() => ({}))
+      .finally(() => {
         submitBtn.disabled = false;
         submitBtn.querySelector('span').textContent = 'Send Message & Book Consultation';
         contactForm.reset();
@@ -447,7 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show toast
         successToast.classList.add('show');
         setTimeout(() => successToast.classList.remove('show'), 4000);
-      }, 1500);
+      });
     });
   }
 
